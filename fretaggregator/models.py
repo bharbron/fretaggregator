@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from .database import Base, engine
@@ -12,7 +12,7 @@ class User(Base):
   email = Column(String(256), unique=True, nullable=False)
   firstname = Column(String(128), nullable=False)
   lastname = Column(String(128), nullable=False)
-  password = Column(String(128))
+  password = Column(String(128), nullable=False)
   
   submissions = relationship("Submission", backref="submitter")
   ratings = relationship("Rating", backref="rater")
@@ -20,7 +20,9 @@ class User(Base):
 class Song(Base):
   __tablename__ = "songs"
   id = Column(Integer, primary_key=True)
-  title = Column(String(512), unique=True, nullable=False)
+  title = Column(String(512), nullable=False)
+  
+  band_id = Column(ForeignKey('bands.id'), nullable=False)
   
   submissions = relationship("Submission", backref="song")
   
@@ -30,6 +32,7 @@ class Band(Base):
   name = Column(String(256), unique=True, nullable=False)
   
   submissions = relationship("Submission", backref="band")
+  songs = relationship("Song", backref="band")
   
 class Guitarist(Base):
   __tablename__ = "guitarists"
@@ -56,7 +59,7 @@ class Link(Base):
 class Rating(base):
   __tablename__ = "ratings"
   id = Column(Integer, primary_key=True)
-  score = Column(Integer, nullable=False)
+  thumbs_up = Column(Boolean, nullable=False)
   
   rater_id = Column(Integer, ForeignKey('users.id'), nullable=False)
   submission_id = Column(Integer, ForeignKey('submissions.id'), nullable=False)
@@ -64,6 +67,7 @@ class Rating(base):
 class Submission(Base):
   __tablename__ = "submissions"
   id = Column(Integer, primary_key=True)
+  submission_date = Column(DateTime, default=datetime.datetime.now)
   
   submitter_id = Column(Integer, ForeignKey('users.id'), nullable=False)
   song_id = Column(Integer, ForeignKey('songs.id'), nullable=False)
