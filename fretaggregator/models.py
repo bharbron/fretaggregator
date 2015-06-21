@@ -56,7 +56,7 @@ class Link(Base):
   
   submissions = relationship("Submission", backref="link")
   
-class Rating(base):
+class Rating(Base):
   __tablename__ = "ratings"
   id = Column(Integer, primary_key=True)
   thumbs_up = Column(Boolean, nullable=False)
@@ -73,7 +73,7 @@ class Submission(Base):
   song_id = Column(Integer, ForeignKey('songs.id'), nullable=False)
   band_id = Column(Integer, ForeignKey('bands.id'), nullable=False)
   link_id = Column(Integer, ForeignKey('links.id'), nullable=False)
-  guitarist_id = Column(Integer, ForeignKey('guitars.id'))
+  guitarist_id = Column(Integer, ForeignKey('guitarists.id'))
   videoguitarist_id = Column(Integer, ForeignKey('videoguitarists.id'))
   
   ratings = relationship("Rating", backref="submission")
