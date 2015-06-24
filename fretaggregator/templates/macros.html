@@ -1,0 +1,16 @@
+{% macro render_submissions(submissions) %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Song</th><th>Band</th><th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for submission in submissions %}
+    <tr>
+      <td>{{ submission.song.title }}</td><td>{{ submission.band.name }}</td><td><a href="{{ submission.link.url }}">Click here!</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
