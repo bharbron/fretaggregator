@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from fretaggregator import app
 from .models import Submission, Song, Band, Link, User, Guitarist, VideoGuitarist
 from .database import session
-from .helpers import get_or_add
+from .helpers import get_one_or_create
 
 @app.route("/", methods=["GET"])
 def home():
@@ -21,6 +21,12 @@ def results():
   pass
   #return render_template("results.html")
   
+@app.route("/search", methods=["POST"])
+def search_post():
+  """ Searches for submissions based on song or band name and returns a list of results """
+  results = []
+  return redirect(url_for("home"))
+  
   
 @app.route("/add", methods=["GET"])
 @login_required
@@ -33,15 +39,19 @@ def add_get():
 def add_post():
   """ Receives the newly POSTed submission and adds it to the database """
   submitter = current_user  
-  band = get_or_add(Band, name=request.form["band"])
-  song = get_or_add(Song, title=request.form["song"], band=band)
-  link = get_or_add(Link, url=request.form["url"])
+  band = get_one_or_create(session, Band, name=request.form["band"])
+  song = get_one_or_create(session, Song, title=request.form["song"], band=band)
+  link = get_one_or_create(session, Link, url=request.form["url"])
+  session.add_all([band, song, link])
+  
   guitarist = None
   videoguitarist = None
   if request.form["guitarist"]:
-    guitarist = get_or_add(Guitarist, name=request.form["guitarist"])
+    guitarist = get_one_or_create(session, Guitarist, name=request.form["guitarist"])
+    session.add(guitarist)
   if request.form["videoguitarist"]:
-    videoguitarist = get_or_add(VideoGuitarist, name=request.form["videoguitarist"])
+    videoguitarist = get_one_or_create(session, VideoGuitarist, name=request.form["videoguitarist"])
+    session.add(videoguitarist)
   
   submission = Submission(submitter=submitter,
                           song=song,

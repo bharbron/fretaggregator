@@ -1,19 +1,11 @@
-from .database import session
+from sqlalchemy.orm.exc import NoResultFound
 import urlparse
 
-def get_or_add(model, **kwargs):
-  """
-  Given a db model and keyword arguments for that model,
-  either fetch the object from the database if it exists,
-  or add it to the database if it doesn't
-  """
-  item = session.query(model).filter_by(**kwargs).first()
-  if item:
-    return item
-  else:
-    item = model(**kwargs)
-    session.add(item)
-    return item
+def get_one_or_create(session, model, **kwargs):
+  try:
+    return session.query(model).filter_by(**kwargs).one()
+  except NoResultFound:
+    return model(**kwargs)
     
 def parse_url(url):
   """
