@@ -42,8 +42,13 @@
                 </div>
               </form>
             </li>
-            <li><a>Sign Up</a></li>
-            <li><a>Login</a></li>
+            {% if current_user.is_authenticated() %}
+            <li><a href="{{ url_for('add_get') }}"><span class="glyphicon glyphicon-plus"></span> Add Link</a></li>
+            <li><a href="{{ url_for('logout') }}"> Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('signup_get') }}"> Sign Up</a></li>
+            <li><a href="{{ url_for('login_get') }}"> Login</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>

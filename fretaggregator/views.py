@@ -66,3 +66,12 @@ def login_post():
 def logout():
   logout_user()
   return redirect(url_for("home"))
+
+@app.route("/signup", methods=["GET"])
+def signup_get():
+  """ Sign up a new user """
+  return render_template("signup.html")
+
+@app.route("/signup", methods=["POST"])
+def signup_post():
+  pass
