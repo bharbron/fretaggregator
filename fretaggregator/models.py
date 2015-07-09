@@ -58,7 +58,18 @@ class Video(Base):
   submissions = relationship("Submission", backref="video")
   
   def as_link(self):
-    return "https://youtu.be/{}".format(self.video_id)
+    return "https://youtu.be/{0}?t={1}".format(self.video_id, self.timestamp)
+  
+  def as_embedded(self, show_controls=False, show_title=False):
+    if show_controls:
+      controls = ""
+    else:
+      controls = "&controls=0"
+    if show_title:
+      title = ""
+    else:
+      title = "&showinfo=0"
+    return "https://www.youtube.com/embed/{0}?start={1}&rel=0{2}{3}".format(self.video_id, self.timestamp, controls, title)
   
 class Rating(Base):
   __tablename__ = "ratings"

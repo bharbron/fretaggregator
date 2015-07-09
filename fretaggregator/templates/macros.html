@@ -9,7 +9,7 @@
     {% for submission in submissions %}
     <tr>
       <td>{{ submission.song.title }}</td><td>{{ submission.band.name }}</td><td><a href="{{ submission.video.as_link() }}">Click here!</a></td>
-      <td><iframe width="200" height="113" src="https://www.youtube.com/embed/LMQfmmp42uw?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></td>
+      <td><iframe width="120" height="68" src="{{ submission.video.as_embedded() }}" frameborder="0" allowfullscreen></iframe></td>
     </tr>
     {% endfor %}
   </tbody>
