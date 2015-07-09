@@ -1,11 +1,12 @@
 import datetime
+from flask.ext.login import UserMixin
 
 from sqlalchemy import Column, Integer, Boolean, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from .database import Base, engine
 
-class User(Base):
+class User(Base, UserMixin):
   __tablename__ = "users"
   
   id = Column(Integer, primary_key=True)

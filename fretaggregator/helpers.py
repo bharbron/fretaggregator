@@ -1,6 +1,6 @@
 from .database import session
 
-def get_or_create(model, **kwargs):
+def get_or_add(model, **kwargs):
   """
   Given a db model and keyword arguments for that model,
   either fetch the object from the database if it exists,
