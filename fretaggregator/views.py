@@ -1,6 +1,6 @@
-from flask import render_template
+from flask import render_template, request, redirect, url_for
 
-from models import Submission
+from models import Submission, Song, Band, Link, User
 from fretaggregator import app
 from .database import session
 
@@ -17,3 +17,28 @@ def home():
 def results():
   pass
   #return render_template("results.html")
+  
+  
+@app.route("/add", methods=["GET"])
+def add_get():
+  """ Page for adding new submissions """
+  return render_template("add.html")
+
+@app.route("/add", methods=["POST"])
+def add_post():
+  """ Receives the newly POSTed submission and adds it to the database """
+  # Until we implement logon, set the submitter to the first user in the database
+  user = session.query(User).get(1)
+  
+  band = Band(name=request.form["band"])
+  song = Song(title=request.form["song"], band=band)
+  link = Link(url=request.form["url"])
+  
+  # TODO: Add the guitarist and video guitarist as well.
+  
+  submission = Submission(submitter=user, song=song, band=band, link=link)
+  
+  session.add_all([band, song, link, submission])
+  session.commit()
+  return redirect(url_for("home"))
+  

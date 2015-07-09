@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add a New Link</h1>
+
+<form role="form" method="POST">
+  <div class="form-group">
+    <label for="url">URL</label>
+    <input type="text" class="form-control" id="url" name="url" placeholder="https://youtu.be/..." required>
+  </div>
+  <div class="form-group">
+    <label for="song">Song</label>
+    <input type="text" class="form-control" id="song" name="song" placeholder="Title of song" required>
+  </div>
+  <div class="form-group">
+    <label for="band">Band</label>
+    <input type="text" class="form-control" id="band" name="band" placeholder="Name of band" required>
+  </div>
+  <div class="form-group">
+    <label for="guitarist">Original Guitarist</label>
+    <input type="text" class="form-control" id="guitarist" name="guitarist" placeholder="Guitarist who originally played the song">
+  </div>
+  <div class="form-group">
+    <label for="videoguitarist">Video Guitarist</label>
+    <input type="text" class="form-control" id="videoguitarist" name="videoguitarist" placeholder="Guitarist playing in the video">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+{% endblock %}
