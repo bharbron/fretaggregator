@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from fretaggregator import app
 from .models import Submission, Song, Band, Link, User
@@ -62,6 +62,9 @@ def login_post():
     flash("Incorrect username or password", "danger")
     return redirect(url_for("login_get"))
   
+  login_user(user)
+  return redirect(request.args.get('next') or url_for("home"))
+  
 @app.route("/logout")
 def logout():
   logout_user()
@@ -74,4 +77,17 @@ def signup_get():
 
 @app.route("/signup", methods=["POST"])
 def signup_post():
-  pass
+  email = request.form["email"]
+  firstname = request.form["firstname"]
+  lastname = request.form["lastname"]
+  password = request.form["password"]
+  if session.query(User).filter_by(email=email).first():
+    flash("User with that email address already exists")
+    return redirect(url_for("signup_get"))
+  
+  user = User(email=email, firstname=firstname, lastname=lastname, password=generate_password_hash(password))
+  session.add(user)
+  session.commit()
+  
+  login_user(user)
+  return redirect(url_for("home"))
