@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from fretaggregator import app
-from .models import Submission, Song, Band, Link, User
+from .models import Submission, Song, Band, Link, User, Guitarist, VideoGuitarist
 from .database import session
 from .helpers import get_or_add
 
@@ -11,7 +11,7 @@ from .helpers import get_or_add
 def home():
   """ Main page of the site """
   # Get a list of the most recent submissions
-  recent_submissions = session.query(Submission).order_by(Submission.submission_date.desc()).limit(3)
+  recent_submissions = session.query(Submission).order_by(Submission.submission_date.desc()).limit(5)
   return render_template("home.html",
                         recent_submissions=recent_submissions
                         )
@@ -32,18 +32,23 @@ def add_get():
 @login_required
 def add_post():
   """ Receives the newly POSTed submission and adds it to the database """
-  # Until we implement logon, set the submitter to the first user in the database
-  user = session.query(User).get(1)
-  
+  submitter = current_user  
   band = get_or_add(Band, name=request.form["band"])
-  #song = Song(title=request.form["song"], band=band)
-  #link = Link(url=request.form["url"])
   song = get_or_add(Song, title=request.form["song"], band=band)
   link = get_or_add(Link, url=request.form["url"])
+  guitarist = None
+  videoguitarist = None
+  if request.form["guitarist"]:
+    guitarist = get_or_add(Guitarist, name=request.form["guitarist"])
+  if request.form["videoguitarist"]:
+    videoguitarist = get_or_add(VideoGuitarist, name=request.form["videoguitarist"])
   
-  # TODO: Add the guitarist and video guitarist as well.
-  
-  submission = Submission(submitter=user, song=song, band=band, link=link)
+  submission = Submission(submitter=submitter,
+                          song=song,
+                          band=band,
+                          link=link,
+                          guitarist=guitarist,
+                          videoguitarist=videoguitarist)
   
   session.add(submission)
   session.commit()
@@ -82,7 +87,7 @@ def signup_post():
   lastname = request.form["lastname"]
   password = request.form["password"]
   if session.query(User).filter_by(email=email).first():
-    flash("User with that email address already exists")
+    flash("User with that email address already exists", "danger")
     return redirect(url_for("signup_get"))
   
   user = User(email=email, firstname=firstname, lastname=lastname, password=generate_password_hash(password))

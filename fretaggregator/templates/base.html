@@ -43,6 +43,7 @@
               </form>
             </li>
             {% if current_user.is_authenticated() %}
+            <li><a>Hi, {{ current_user.firstname }}!</a></li>
             <li><a href="{{ url_for('add_get') }}"><span class="glyphicon glyphicon-plus"></span> Add Link</a></li>
             <li><a href="{{ url_for('logout') }}"> Logout</a></li>
             {% else %}
