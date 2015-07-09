@@ -49,13 +49,16 @@ class VideoGuitarist(Base):
   
   submissions = relationship("Submission", backref="videoguitarist")
   
-class Link(Base):
-  __tablename__ = "links"
+class Video(Base):
+  __tablename__ = "videos"
   id = Column(Integer, primary_key=True)
-  url = Column(String(256))
+  video_id = Column(String(256), nullable=False)
   timestamp = Column(Integer, default=0)
   
-  submissions = relationship("Submission", backref="link")
+  submissions = relationship("Submission", backref="video")
+  
+  def as_link(self):
+    return "https://youtu.be/{}".format(self.video_id)
   
 class Rating(Base):
   __tablename__ = "ratings"
@@ -73,7 +76,7 @@ class Submission(Base):
   submitter_id = Column(Integer, ForeignKey('users.id'), nullable=False)
   song_id = Column(Integer, ForeignKey('songs.id'), nullable=False)
   band_id = Column(Integer, ForeignKey('bands.id'), nullable=False)
-  link_id = Column(Integer, ForeignKey('links.id'), nullable=False)
+  video_id = Column(Integer, ForeignKey('videos.id'), nullable=False)
   guitarist_id = Column(Integer, ForeignKey('guitarists.id'))
   videoguitarist_id = Column(Integer, ForeignKey('videoguitarists.id'))
   

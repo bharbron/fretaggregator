@@ -3,9 +3,9 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from fretaggregator import app
-from .models import Submission, Song, Band, Link, User, Guitarist, VideoGuitarist
+from .models import Submission, Song, Band, Video, User, Guitarist, VideoGuitarist
 from .database import session
-from .helpers import get_one_or_create
+from .helpers import get_one_or_create, get_video_id
 
 @app.route("/", methods=["GET"])
 def home():
@@ -41,8 +41,9 @@ def add_post():
   submitter = current_user  
   band = get_one_or_create(session, Band, name=request.form["band"])
   song = get_one_or_create(session, Song, title=request.form["song"], band=band)
-  link = get_one_or_create(session, Link, url=request.form["url"])
-  session.add_all([band, song, link])
+  video_id = get_video_id(request.form["url"])
+  video = get_one_or_create(session, Video, video_id=video_id)
+  session.add_all([band, song, video])
   
   guitarist = None
   videoguitarist = None
@@ -56,7 +57,7 @@ def add_post():
   submission = Submission(submitter=submitter,
                           song=song,
                           band=band,
-                          link=link,
+                          video=video,
                           guitarist=guitarist,
                           videoguitarist=videoguitarist)
   
