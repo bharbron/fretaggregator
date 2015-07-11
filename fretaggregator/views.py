@@ -16,16 +16,14 @@ def home():
                         recent_submissions=recent_submissions
                         )
 
-@app.route("/results", methods=["GET"])
-def results():
-  pass
-  #return render_template("results.html")
   
-@app.route("/search", methods=["POST"])
-def search_post():
-  """ Searches for submissions based on song or band name and returns a list of results """
-  results = []
-  return redirect(url_for("home"))
+@app.route("/search", methods=["GET"])
+def search_get():
+  """ Searches for submissions based on song or band name and returns a page with results """
+  search = request.args.get("search")
+  submissions = session.query(Submission).join(Song).join(Band)
+  results = submissions.filter((Song.title.ilike("%{}%".format(search))) | (Band.name.ilike("%{}%".format(search)))).order_by(Band.name, Song.title).all()
+  return render_template("search.html", results=results)
   
   
 @app.route("/add", methods=["GET"])
