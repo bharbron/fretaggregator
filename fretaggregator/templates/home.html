@@ -1,22 +1,19 @@
 {% import "macros.html" as macros %}
 {% extends "base.html" %}
 {% block content %}
-<div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
-    <h1 class="text-center">Watch Me Fret</h1>
-    <h3 class="text-center">Time to learn</h3>
-  </div>
-  <div class="col-md-2"></div>
+<div class="jumbotron">
+  <h1>Welcome to WatchMeFret</h1>
+  <p>The site where we collect the best videos with the best views of people fretting the guitar to your favorite songs!</p>
+  <button class="btn btn-primary btn-lg">Learn More &raquo;</button>
 </div>
 
 <div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
     <h4>Check out these recently added videos!</h4>
     {{ macros.render_submissions(recent_submissions) }}
   </div>
-  <div class="col-md-2"></div>
+  <div class="col-md-1"></div>
 </div>
   
 
