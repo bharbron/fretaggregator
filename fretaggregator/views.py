@@ -105,3 +105,9 @@ def signup_post():
   
   login_user(user)
   return redirect(url_for("home"))
+
+@app.route("/details/<int:id>", methods=["GET"])
+def details_get(id):
+  """ Display page for a single submission """
+  submission = session.query(Submission).get(id)
+  return render_template("details.html", submission=submission)
