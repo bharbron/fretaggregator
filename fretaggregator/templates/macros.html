@@ -8,9 +8,8 @@
   <tbody>
     {% for submission in submissions %}
     <tr>
-      <td>{{ submission.song.title }}</td>
+      <td><a href="{{ url_for('details_get', id=submission.id) }}">{{ submission.song.title }}</a></td>
       <td>{{ submission.band.name }}</td>
-      <td><a href="{{ submission.video.as_link() }}">Click here!</a></td>
       <td><iframe width="120" height="68" src="{{ submission.video.as_embedded() }}" frameborder="0" allowfullscreen></iframe></td>
     </tr>
     {% endfor %}

@@ -1,0 +1,28 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+{% block content %}
+
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <td>Song</td>
+      <td>{{ submission.song.title }}</td>
+    </tr>
+    <tr>
+      <td>Band</td>
+      <td>{{ submission.band.name }}</td>
+    </tr>
+    <tr>
+      <td>Original Guitarist</td>
+      <td>{{ submission.guitarist.name }}</td>
+    </tr>
+    <tr>
+      <td>Video Guitarist</td>
+      <td>{{ submission.videoguitarist.name }}</td>
+    </tr>    
+  </tbody>
+</table>
+
+<iframe width="420" height="315" src="{{ submission.video.as_embedded(show_controls=True, show_title=True) }}" frameborder="0" allowfullscreen></iframe>
+  
+{% endblock %}
