@@ -111,3 +111,8 @@ def details_get(id):
   """ Display page for a single submission """
   submission = session.query(Submission).get(id)
   return render_template("details.html", submission=submission)
+  
+@app.route("/learnmore", methods=["GET"])
+def learn_more_get():
+  """ Displays the Learn More About the Site page """
+  return render_template("learnmore.html")
