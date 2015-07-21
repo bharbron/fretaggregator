@@ -2,7 +2,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Song</th><th>Band</th><th>Link</th>
+      <th>Song</th><th>Band</th><th>Rating</th><th>Video</th>
     </tr>
   </thead>
   <tbody>
@@ -10,6 +10,7 @@
     <tr>
       <td><a href="{{ url_for('details_get', id=submission.id) }}">{{ submission.song.title }}</a></td>
       <td>{{ submission.band.name }}</td>
+      <td><span class="glyphicon glyphicon-thumbs-up"></span> 3 <span class="glyphicon glyphicon-thumbs-down"></span> 4</td>
       <td><iframe width="120" height="68" src="{{ submission.video.as_embedded() }}" frameborder="0" allowfullscreen></iframe></td>
     </tr>
     {% endfor %}
