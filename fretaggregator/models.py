@@ -4,7 +4,7 @@ from flask.ext.login import UserMixin
 from sqlalchemy import Column, Integer, Boolean, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
-from .database import Base, engine
+from .database import Base, engine, session
 
 class User(Base, UserMixin):
   __tablename__ = "users"
@@ -92,3 +92,9 @@ class Submission(Base):
   videoguitarist_id = Column(Integer, ForeignKey('videoguitarists.id'))
   
   ratings = relationship("Rating", backref="submission")
+  
+  def count_thumbs_up(self):
+    return session.query(Rating).filter_by(thumbs_up = True, submission_id = self.id).count()
+    
+  def count_thumbs_down(self):
+    return session.query(Rating).filter_by(thumbs_up = False, submission_id = self.id).count()

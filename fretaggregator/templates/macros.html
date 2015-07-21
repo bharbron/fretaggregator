@@ -10,7 +10,7 @@
     <tr>
       <td><a href="{{ url_for('details_get', id=submission.id) }}">{{ submission.song.title }}</a></td>
       <td>{{ submission.band.name }}</td>
-      <td><span class="glyphicon glyphicon-thumbs-up"></span> 3 <span class="glyphicon glyphicon-thumbs-down"></span> 4</td>
+      <td><span class="glyphicon glyphicon-thumbs-up"></span> {{  submission.count_thumbs_up() }} <span class="glyphicon glyphicon-thumbs-down"></span> {{  submission.count_thumbs_down() }}</td>
       <td><iframe width="120" height="68" src="{{ submission.video.as_embedded() }}" frameborder="0" allowfullscreen></iframe></td>
     </tr>
     {% endfor %}
