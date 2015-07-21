@@ -2,38 +2,42 @@
 {% extends "base.html" %}
 {% block content %}
 
-<table class="table table-striped">
-  <tbody>
-    <tr>
-      <td>Song</td>
-      <td>{{ submission.song.title }}</td>
-    </tr>
-    <tr>
-      <td>Band</td>
-      <td>{{ submission.band.name }}</td>
-    </tr>
-    <tr>
-      <td>Original Guitarist</td>
-      <td>{{ submission.guitarist.name }}</td>
-    </tr>
-    <tr>
-      <td>Video Guitarist</td>
-      <td>{{ submission.videoguitarist.name }}</td>
-    </tr>
-    {% if current_user.is_authenticated() %}
-    <tr>
-      <td>Ratings</td>
-      <td><a href="{{ url_for('like_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-up"></span></a> {{  submission.count_thumbs_up() }} <a href="{{ url_for('dislike_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-down"></span></a> {{  submission.count_thumbs_down() }}</td>
-    </tr>
-    {% else %}
-    <tr>
-      <td>Ratings</td>
-      <td><span class="glyphicon glyphicon-thumbs-up"></span> {{  submission.count_thumbs_up() }} <span class="glyphicon glyphicon-thumbs-down"></span> {{  submission.count_thumbs_down() }}</td>
-    </tr>
-    {% endif %}
-  </tbody>
-</table>
-
-<iframe width="420" height="315" src="{{ submission.video.as_embedded(show_controls=True, show_title=True) }}" frameborder="0" allowfullscreen></iframe>
-  
+<div class="row">
+  <div class="col-md-6">
+    <iframe width="420" height="315" src="{{ submission.video.as_embedded(show_controls=True, show_title=True) }}" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div class="col-md-6">
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td>Song</td>
+          <td>{{ submission.song.title }}</td>
+        </tr>
+        <tr>
+          <td>Band</td>
+          <td>{{ submission.band.name }}</td>
+        </tr>
+        <tr>
+          <td>Original Guitarist</td>
+          <td>{{ submission.guitarist.name }}</td>
+        </tr>
+        <tr>
+          <td>Video Guitarist</td>
+          <td>{{ submission.videoguitarist.name }}</td>
+        </tr>
+        {% if current_user.is_authenticated() %}
+        <tr>
+          <td>Ratings</td>
+          <td><a href="{{ url_for('like_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-up"></span></a> {{  submission.count_thumbs_up() }} <a href="{{ url_for('dislike_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-down"></span></a> {{  submission.count_thumbs_down() }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td>Ratings</td>
+          <td><span class="glyphicon glyphicon-thumbs-up"></span> {{  submission.count_thumbs_up() }} <span class="glyphicon glyphicon-thumbs-down"></span> {{  submission.count_thumbs_down() }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
