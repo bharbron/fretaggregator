@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from fretaggregator import app
-from .models import Submission, Song, Band, Video, User, Guitarist, VideoGuitarist
+from .models import Submission, Song, Band, Video, User, Guitarist, VideoGuitarist, Rating
 from .database import session
 from .helpers import get_one_or_create, get_video_id
 
@@ -116,3 +116,31 @@ def details_get(id):
 def learn_more_get():
   """ Displays the Learn More About the Site page """
   return render_template("learnmore.html")
+  
+@app.route("/like/<int:id>", methods=["GET"])
+@login_required
+def like_get(id):
+  """ Marks a thumbs up rating on the video and returns to the details page """
+  submission = session.query(Submission).get(id)
+  rating = session.query(Rating).filter_by(submission_id = id, rater_id = current_user.id).first()
+  if rating:
+    rating.thumbs_up = True
+  else:
+    rating = Rating(rater=current_user, submission=submission, thumbs_up=True)
+  session.add(rating)
+  session.commit()
+  return render_template("details.html", submission=submission)
+  
+@app.route("/dislike/<int:id>", methods=["GET"])
+@login_required
+def dislike_get(id):
+  """ Marks a thumbs down rating on the video and returns to the details page """
+  submission = session.query(Submission).get(id)
+  rating = session.query(Rating).filter_by(submission_id = id, rater_id = current_user.id).first()
+  if rating:
+    rating.thumbs_up = False
+  else:
+    rating = Rating(rater=current_user, submission=submission, thumbs_up=False)
+  session.add(rating)
+  session.commit()
+  return render_template("details.html", submission=submission)

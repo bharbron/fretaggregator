@@ -19,7 +19,18 @@
     <tr>
       <td>Video Guitarist</td>
       <td>{{ submission.videoguitarist.name }}</td>
-    </tr>    
+    </tr>
+    {% if current_user.is_authenticated() %}
+    <tr>
+      <td>Ratings</td>
+      <td><a href="{{ url_for('like_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-up"></span></a> {{  submission.count_thumbs_up() }} <a href="{{ url_for('dislike_get', id=submission.id) }}"><span class="glyphicon glyphicon-thumbs-down"></span></a> {{  submission.count_thumbs_down() }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td>Ratings</td>
+      <td><span class="glyphicon glyphicon-thumbs-up"></span> {{  submission.count_thumbs_up() }} <span class="glyphicon glyphicon-thumbs-down"></span> {{  submission.count_thumbs_down() }}</td>
+    </tr>
+    {% endif %}
   </tbody>
 </table>
 
